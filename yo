@@ -1,0 +1,43 @@
+// MainServlet.java
+@WebServlet("/quiz")
+public class MainServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Load quiz questions from the database
+        List<Question> questions = QuizService.loadQuestions();
+
+        // Store questions in session
+        HttpSession session = request.getSession();
+        session.setAttribute("questions", questions);
+
+        // Forward to quiz.jsp for rendering
+        RequestDispatcher dispatcher = request.getRequestDispatcher("quiz.jsp");
+        dispatcher.forward(request, response);
+    }
+}
+
+// QuizService.java
+public class QuizService {
+    public static List<Question> loadQuestions() {
+        // Retrieve questions from the database
+        // Example: return a hardcoded list for simplicity
+        return Arrays.asList(
+            new Question("What is the real name of Iron Man?", Arrays.asList("Tony Stark", "Steve Rogers", "Bruce Banner", "Peter Parker"), 0),
+            // Add more questions here
+        );
+    }
+}
+
+// Question.java
+public class Question {
+    private String question;
+    private List<String> options;
+    private int correctOption;
+
+    public Question(String question, List<String> options, int correctOption) {
+        this.question = question;
+        this.options = options;
+        this.correctOption = correctOption;
+    }
+
+    // Getters and setters
+}
